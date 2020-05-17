@@ -179,9 +179,10 @@ template {
     display: none;
 }
 
-/* main */
+/* general */
 :root {
     --light-grey-color: #eff1f5;
+    --green-color: #26bd60;
 }
 
 html,
@@ -199,11 +200,29 @@ a:hover {
     text-decoration: underline;
 }
 
+p {
+    max-width: 500px;
+}
+
+blockquote {
+    max-width: 500px;
+}
 
 main {
     margin-left: 16px;
 }
 
+aside {
+    margin-top: 8px;
+    margin-left: 16px;
+    color: var(--green-color);
+}
+
+nav {
+    margin-top: 32px;
+}
+
+/* index */
 th {
     text-align: left;
 }
@@ -214,4 +233,17 @@ tr {
 
 tr:nth-child(even) {
     background: var(--light-grey-color);
+}
+
+/* form */
+label {
+    display: block;
+}
+
+input[type="text"],
+input[type="url"],
+textarea {
+    display: block;
+    border: 2px solid var(--light-grey-color);
+    margin-bottom: 16px;
 }
