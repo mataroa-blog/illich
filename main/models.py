@@ -6,3 +6,6 @@ class Blog(models.Model):
     url = models.URLField()
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.url
