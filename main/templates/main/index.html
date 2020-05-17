@@ -10,24 +10,25 @@
         <link rel="stylesheet" href="{% static 'style.css' %}">
     </head>
     <body>
-        <h1>Blogs</h1>
+        <main>
+            <h1>Blogs</h1>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>URL</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for blog in object_list %}
-                <tr>
-                    <td>{{ blog.title }}</td>
-                    <td><a href="{{ blog.url }}">{{ blog.url }}</a></td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for blog in object_list %}
+                    <tr>
+                        <td>{{ blog.title }}</td>
+                        <td><a href="{{ blog.url }}">{{ blog.url }}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </main>
     </body>
 </html>
