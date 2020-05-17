@@ -24,6 +24,14 @@
 
         <script>
             console.log('If you want to add a blog go to /new.');
+
+            window.addEventListener('keypress', function (evt) {
+                if (evt.key === 'n') {
+                    document.location.assign('/new');
+                } else if (evt.key === 'u') {
+                    document.location.assign('/');
+                }
+            });
         </script>
 
     </body>
