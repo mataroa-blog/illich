@@ -15,4 +15,4 @@ class BlogCreate(SuccessMessageMixin, CreateView):
     model = models.Blog
     fields = ["title", "url", "description"]
     success_url = reverse_lazy("index")
-    success_message = "addition successful"
+    success_message = "addition of %(url)s successful"
