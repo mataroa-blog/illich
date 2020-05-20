@@ -204,8 +204,8 @@ p {
     max-width: 500px;
 }
 
-blockquote {
-    max-width: 500px;
+h1 {
+    font-weight: 500;
 }
 
 main {
@@ -223,6 +223,9 @@ nav {
     margin-top: 32px;
 }
 
+blockquote {
+    max-width: 500px;
+}
 /* index */
 th {
     text-align: left;
