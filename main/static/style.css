@@ -183,6 +183,7 @@ template {
 :root {
     --light-grey-color: #eff1f5;
     --green-color: #26bd60;
+    --red-color: #ff0000;
 }
 
 html,
@@ -250,4 +251,12 @@ textarea {
     display: block;
     border: 2px solid var(--light-grey-color);
     margin-bottom: 16px;
+}
+
+.form-error {
+    color: var(--red-color);
+}
+
+.form-error::before {
+    content: "» ";
 }

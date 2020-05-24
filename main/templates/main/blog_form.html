@@ -26,12 +26,31 @@
     </ol>
 
     <form method="post">
+        {{ form.non_field_errors }}
         <label for="id_url">URL</label>
+        {% if form.url.errors %}
+            {% for error in form.url.errors %}
+                <div class="form-error">{{ error|escape }}</div>
+            {% endfor %}
+        {% endif %}
         <input type="url" name="url" id="id_url" maxlength="500" required autofocus value="{{ form.url.value|default_if_none:"" }}">
+
         <label for="id_title">Title</label>
+        {% if form.title.errors %}
+            {% for error in form.title.errors %}
+                <div class="form-error">{{ error|escape }}</div>
+            {% endfor %}
+        {% endif %}
         <input type="text" name="title" id="id_title" maxlength="500" required value="{{ form.title.value|default_if_none:"" }}">
+
         <label for="description">Small description / comment</label>
+        {% if form.description.errors %}
+            {% for error in form.description.errors %}
+                <div class="form-error">{{ error|escape }}</div>
+            {% endfor %}
+        {% endif %}
         <textarea name="description" id="description" cols="30" rows="3">{{ form.description.value|default_if_none:"" }}</textarea>
+
         {% csrf_token %}
         <input type="submit" value="add">
     </form>
