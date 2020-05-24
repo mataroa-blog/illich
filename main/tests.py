@@ -20,3 +20,21 @@ class BlogCreateTestCase(TestCase):
         response = self.client.post(reverse("blog_create"), data)
         self.assertEqual(response.status_code, 302)
         self.assertTrue(models.Blog.objects.get(url=data["url"]))
+
+
+class BlogCreateDuplicateTestCase(TestCase):
+    def test_duplicate_blog_creation(self):
+        data = {
+            "title": "jon's blog",
+            "url": "https://jon.com",
+            "description": "opinions",
+        }
+        self.client.post(reverse("blog_create"), data)
+        data = {
+            "title": "jon's 2nd blog",
+            "url": "https://jon.com",
+            "description": "opinions",
+        }
+        response = self.client.post(reverse("blog_create"), data)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(models.Blog.objects.filter(url=data["url"]).count(), 1)
