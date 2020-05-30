@@ -1,4 +1,7 @@
+import random
+
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
@@ -16,3 +19,9 @@ class BlogCreate(SuccessMessageMixin, CreateView):
     fields = ["title", "url", "description"]
     success_url = reverse_lazy("index")
     success_message = "addition of %(url)s successful"
+
+
+def go_random(request):
+    all_blogs = models.Blog.objects.all()
+    random_blog = random.choice(all_blogs)
+    return redirect(random_blog.url)
