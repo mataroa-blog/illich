@@ -227,6 +227,7 @@ nav {
 blockquote {
     max-width: 500px;
 }
+
 /* index */
 th {
     text-align: left;
@@ -238,6 +239,11 @@ tr {
 
 tr:nth-child(even) {
     background: var(--light-grey-color);
+}
+
+footer {
+    margin-left: 16px;
+    margin-bottom: 16px;
 }
 
 /* form */
