@@ -11,9 +11,8 @@ black==19.10b0            # via -r requirements.in
 click==7.1.2              # via black
 dj-database-url==0.5.0    # via -r requirements.in
 django-dotenv==1.4.2      # via -r requirements.in
-django==3.0.6             # via -r requirements.in
+django==3.0.7             # via -r requirements.in
 flake8==3.8.1             # via -r requirements.in
-importlib-metadata==1.6.0  # via flake8, markdown
 isort==4.3.21             # via -r requirements.in
 markdown==3.2.2           # via -r requirements.in
 mccabe==0.6.1             # via flake8
@@ -28,4 +27,3 @@ toml==0.10.1              # via black
 typed-ast==1.4.1          # via black
 uwsgi==2.0.18             # via -r requirements.in
 whitenoise==5.0.1         # via -r requirements.in
-zipp==3.1.0               # via importlib-metadata
