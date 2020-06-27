@@ -20,6 +20,12 @@ class BlogCreate(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy("index")
     success_message = "addition of %(url)s successful"
 
+    def form_valid(self, form):
+        form.cleaned.data["title"] = form.cleaned.data["title"].strip()
+        form.cleaned.data["url"] = form.cleaned.data["url"].strip()
+        form.cleaned.data["description"] = form.cleaned.data["description"].strip()
+        return super().form_valid(form)
+
 
 def go_random(request):
     all_blogs = models.Blog.objects.all()
