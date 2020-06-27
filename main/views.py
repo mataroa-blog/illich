@@ -21,9 +21,9 @@ class BlogCreate(SuccessMessageMixin, CreateView):
     success_message = "addition of %(url)s successful"
 
     def form_valid(self, form):
-        form.cleaned.data["title"] = form.cleaned.data["title"].strip()
-        form.cleaned.data["url"] = form.cleaned.data["url"].strip()
-        form.cleaned.data["description"] = form.cleaned.data["description"].strip()
+        form.cleaned_data["title"] = form.cleaned_data["title"].strip()
+        form.cleaned_data["url"] = form.cleaned_data["url"].strip()
+        form.cleaned_data["description"] = form.cleaned_data["description"].strip()
         return super().form_valid(form)
 
 
