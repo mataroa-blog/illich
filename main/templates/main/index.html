@@ -17,6 +17,7 @@
                 <th>Name</th>
                 <th>URL</th>
                 {% if request.user.is_authenticated %}
+                <th>Description</th>
                 <th>Admin</th>
                 {% endif %}
             </tr>
@@ -27,6 +28,7 @@
                 <td>{{ blog.title }}</td>
                 <td><a href="{{ blog.url }}">{{ blog.url }}</a></td>
                 {% if request.user.is_authenticated %}
+                <td>{{ blog.description }}</td>
                 <td><a href="{% url 'admin:main_blog_change' blog.id %}">Edit</a></td>
                 {% endif %}
             </tr>
