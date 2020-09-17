@@ -11,6 +11,8 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name="blog", name="url", field=models.URLField(unique=True),
+            model_name="blog",
+            name="url",
+            field=models.URLField(unique=True),
         ),
     ]
