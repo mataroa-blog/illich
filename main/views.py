@@ -1,5 +1,6 @@
 import random
 
+from django import forms
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -11,7 +12,18 @@ from main import models
 
 class BlogList(ListView):
     template_name = "main/index.html"
-    queryset = models.Blog.objects.all().order_by("?")
+
+    def get_queryset(self):
+        class KeywordForm(forms.Form):
+            key = forms.CharField(max_length=50)
+
+        form = KeywordForm(self.request.GET)
+        if form.is_valid():
+            return models.Blog.objects.filter(
+                description__icontains=form.cleaned_data["key"]
+            )
+        else:
+            return models.Blog.objects.all().order_by("?")
 
 
 class BlogCreate(SuccessMessageMixin, CreateView):
