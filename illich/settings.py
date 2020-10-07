@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "nonrandom_secret")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.environ.get("NODEBUG") is None else False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "blogs.sirodoht.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "blogs.sirodoht.com", "sirolocal.com"]
 
 
 # Application definition
@@ -116,6 +116,22 @@ USE_TZ = False
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "_static")
+
+# Logging
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "WARNING",
+    },
+}
 
 
 # Security middleware
