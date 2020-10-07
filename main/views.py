@@ -1,5 +1,6 @@
 import random
-import urllib
+import urllib.error
+import urllib.request
 
 from django import forms
 from django.contrib.messages.views import SuccessMessageMixin
