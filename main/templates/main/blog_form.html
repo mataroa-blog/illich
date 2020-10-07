@@ -60,3 +60,31 @@
     </nav>
 </main>
 {% endblock %}
+
+{% block scripts %}
+<script>
+    var csrfToken = '{{ csrf_token }}';
+
+    function handleResponse(evt) {
+        if (evt.target.status === 200) {
+            document.getElementById('id_title').value = this.responseText;
+        }
+    }
+
+    function requestBlogTitle() {
+        // build form data
+        var data = new FormData();
+        var blogURL = document.getElementById('id_url').value;
+        data.append('url', blogURL);
+
+        // xhr request
+        var req = new XMLHttpRequest();
+        req.addEventListener('load', handleResponse);
+        req.open('POST', '/metadata/');
+        req.setRequestHeader('X-CSRFToken', csrfToken);
+        req.send(data);
+    }
+
+    document.getElementById('id_title').addEventListener('focus', requestBlogTitle);
+</script>
+{% endblock %}
