@@ -1,7 +1,9 @@
 import random
+import urllib
 
 from django import forms
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView
@@ -37,6 +39,25 @@ class BlogCreate(SuccessMessageMixin, CreateView):
         form.cleaned_data["url"] = form.cleaned_data["url"].strip()
         form.cleaned_data["description"] = form.cleaned_data["description"].strip()
         return super().form_valid(form)
+
+
+def metadata(request):
+    if request.method != "POST":
+        return HttpResponse()
+
+    class MetadataForm(forms.Form):
+        url = forms.URLField()
+
+    form = MetadataForm(request.POST)
+    if form.is_valid():
+        try:
+            webpage = urllib.request.urlopen(form.cleaned_data.get("url")).read()
+            title = str(webpage).split("<title>")[1].split("</title>")[0]
+        except (urllib.error.HTTPError, urllib.error.URLError):
+            title = ""
+        return HttpResponse(title)
+    else:
+        return HttpResponse("")
 
 
 def go_random(request):
