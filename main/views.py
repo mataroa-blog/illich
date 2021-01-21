@@ -53,7 +53,7 @@ def metadata(request):
     if form.is_valid():
         try:
             webpage = urllib.request.urlopen(form.cleaned_data.get("url")).read()
-            title = str(webpage).split("<title>")[1].split("</title>")[0]
+            title = str(webpage).replace("\n", " ").split("<title>")[1].split("</title>")[0]
         except (urllib.error.HTTPError, urllib.error.URLError):
             title = ""
         return HttpResponse(title)
