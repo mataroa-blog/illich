@@ -15,5 +15,8 @@ ssh root@95.217.223.96 'cd /opt/apps/illich && source venv/bin/activate && pytho
 # migrate database
 ssh root@95.217.223.96 'cd /opt/apps/illich && source venv/bin/activate && source .envrc && python manage.py migrate'
 
+# reload
+ssh root@95.217.223.96 'cp /opt/apps/illich/illich.ini /etc/uwsgi/vassals/ && cd /opt/apps/illich && source .envrc && uwsgi --reload /etc/uwsgi/vassals/illich.ini'
+
 # copy and reload nginx config
 ssh root@95.217.223.96 'cp /opt/apps/illich/collection.mataroa.blog.conf /etc/nginx/sites-available/ && nginx -t && systemctl reload nginx'
