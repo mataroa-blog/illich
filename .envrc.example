@@ -1,2 +1,4 @@
-export SECRET_KEY="secret_is_here"
-export DATABASE_URL="postgres://illich@127.0.0.1:5432/illich"
+export SECRET_KEY=some-secret-key
+export DATABASE_URL=postgres://illich@127.0.0.1:5432/illich
+export EMAIL_HOST_USER=smtp-user
+export EMAIL_HOST_PASSWORD=smtp-password

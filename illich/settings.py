@@ -29,6 +29,7 @@ DEBUG = True if os.environ.get("NODEBUG") is None else False
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "collection.mataroa.blog", "sirolocal.com"]
 
+ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
 
 # Application definition
 
@@ -133,6 +134,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Email
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.postmarkapp.com"
+EMAIL_HOST_BROADCASTS = "smtp-broadcasts.postmarkapp.com"
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_PORT = 587
+
+DEFAULT_FROM_EMAIL = "Mataroa Admin <admin@mataroa.blog>"
+EMAIL_FROM_HOST = "mataroa.blog"
+SERVER_EMAIL = "Ted Lasso <server@mataroa.blog>"
+EMAIL_SUBJECT_PREFIX = "[Illich Notification] "
 
 
 # Security middleware

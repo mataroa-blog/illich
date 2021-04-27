@@ -49,6 +49,8 @@ cp .envrc.example .envrc
 ```sh
 export SECRET_KEY=some-secret-key
 export DATABASE_URL=postgres://illich:db-password@db:5432/illich
+export EMAIL_HOST_USER=smtp-user
+export EMAIL_HOST_PASSWORD=smtp-password
 ```
 
 When on production, also include the following variables (see [Deployment](#Deployment) and
