@@ -126,7 +126,7 @@ production variables — including `NODEBUG`):
 
 ```sh
 source .envrc
-uwsgi uwsgi.ini
+uwsgi illich.ini
 ```
 
 Note that the value of the `NODEBUG` variable is ignored. What matters is merely its existence
