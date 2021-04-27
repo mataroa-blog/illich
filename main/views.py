@@ -3,6 +3,7 @@ import urllib.error
 import urllib.request
 
 from django import forms
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -29,7 +30,7 @@ class BlogList(ListView):
             return models.Blog.objects.all().order_by("?")
 
 
-class BlogCreate(SuccessMessageMixin, CreateView):
+class BlogCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = models.Blog
     fields = ["title", "url", "description"]
     success_url = reverse_lazy("index")
@@ -53,7 +54,9 @@ def metadata(request):
     if form.is_valid():
         try:
             webpage = urllib.request.urlopen(form.cleaned_data.get("url")).read()
-            title = str(webpage).replace("\n", " ").split("<title>")[1].split("</title>")[0]
+            title = (
+                str(webpage).replace("\n", " ").split("<title>")[1].split("</title>")[0]
+            )
         except (urllib.error.HTTPError, urllib.error.URLError):
             title = ""
         return HttpResponse(title)
