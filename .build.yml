@@ -1,0 +1,19 @@
+image: ubuntu/20.04
+packages:
+  - python3
+  - python3-pip
+  - postgresql
+tasks:
+  - build: |
+      cd illich
+      pip3 install -r requirements.txt
+  - test: |
+      cd illich
+      sudo -u postgres psql -U postgres -d postgres -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+      export DATABASE_URL='postgres://postgres:postgres@localhost:5432/postgres'
+      python3 manage.py test
+  - lint: |
+      cd illich
+      pip3 install -r requirements_dev.txt
+      export PATH=/home/build/.local/bin:$PATH
+      make lint
