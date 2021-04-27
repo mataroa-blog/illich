@@ -1,6 +1,13 @@
 # illich
 
-List of blogs
+Mataroa Collection list of blogs.
+
+## Contributing
+
+Feel free to open a PR on [GitHub](https://github.com/sirodoht/illich) or
+send an email patch to [~sirodoht/public-inbox@lists.sr.ht](mailto:~sirodoht/public-inbox@lists.sr.ht).
+
+On how to contribute using email patches see [git-send-email.io](https://git-send-email.io/).
 
 ## Development
 
@@ -10,6 +17,8 @@ This is a [Django](https://www.djangoproject.com/) codebase. Check out the
 ### Structure
 
 The Django project is `illich`. There is one Django app, `main`,  with all business logic.
+Application CLI commands are generally divided into two categories, those under `python manage.py`
+and those under `make`.
 
 ### Dependencies
 
@@ -19,41 +28,41 @@ Using [venv](https://docs.python.org/3/library/venv.html):
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+pip install -r requirements_dev.txt
 ```
 
-This project also uses [pip-tools](https://github.com/jazzband/pip-tools) for
-dependencies management.
+This project also uses [pip-tools](https://github.com/jazzband/pip-tools) for dependency
+management.
 
 ### Environment variables
 
-You need to create a new file named `.env` in the root of this project once you cloned it.
-
-`.env` should contain the following env variables:
+A file named `.envrc` is used to define the environment variables required for this project to
+function. One can either export it directly or use [direnv](https://github.com/direnv/direnv).
+There is an example environment file one can copy as base:
 
 ```sh
-SECRET_KEY="thisisthesecretkey"
-DATABASE_URL="postgres://username:password@localhost:5432/db_name"
-EMAIL_HOST_USER="smtp_user"
-EMAIL_HOST_PASSWORD="smtp_password"
+cp .envrc.example .envrc
+```
+
+`.envrc` should contain the following variables:
+
+```sh
+export SECRET_KEY=some-secret-key
+export DATABASE_URL=postgres://illich:db-password@db:5432/illich
+```
+
+When on production, also include the following variables (see [Deployment](#Deployment) and
+[Backup](#Backup)):
+
+```sh
+export NODEBUG=1
+export PGPASSWORD=db-password
 ```
 
 ### Database
 
-This project uses PostgreSQL. See above on how to configure access to it using
-the `.env` file.
-
-There is no need to create manually one if you're using Docker and
-[Docker Compose](https://docs.docker.com/compose/). Run this to spin up the
-database in the background:
-
-```sh
-docker-compose up -d db
-```
-
-The database data will be saved in a gitignored directory, `db_data`, in the root of
-the project.
-
-To create the database schema:
+This project uses PostgreSQL. Assuming one has set the `DATABASE_URL` (see above), to create the
+database schema:
 
 ```sh
 python manage.py migrate
@@ -67,67 +76,83 @@ To run the Django development server:
 python manage.py runserver
 ```
 
-Or, if you prefer to run the web server under Docker:
+### Docker
 
-```sh
-docker-compose up web
-```
+If Docker and docker-compose are preferred, then:
 
-In which case, `DATABASE_URL` in `.env` should be like this:
+1. Set `DATABASE_URL` in `.envrc` to `postgres://postgres:postgres@db:5432/postgres`
+1. Run `docker-compose up -d`.
 
-```sh
-DATABASE_URL="postgres://postgres:postgres@db:5432/postgres"
-```
-
-You can also run just the database using Docker and the webserver without,
-in which case `.env` would be like this:
-
-```sh
-DATABASE_URL="postgres://postgres:postgres@127.0.0.1:5432/postgres"
-```
-
-and you would start the database like so:
-
-```sh
-docker-compose up db
-```
+The database data will be saved in the git-ignored directory / Docker volume `db_data`,
+located in the root of the project.
 
 ## Testing
+
+Using the Django test runner:
 
 ```sh
 python manage.py test
 ```
 
-## Code linting & formatting
+For coverage, run:
 
 ```sh
-black . && isort --profile black . && flake8
+make cov
+```
+
+## Code linting & formatting
+
+The following tools are used for code linting and formatting:
+
+* [black](https://github.com/psf/black) for code formatting.
+* [isort](https://github.com/pycqa/isort) for imports order consistency.
+* [flake8](https://gitlab.com/pycqa/flake8) for code linting.
+
+To use:
+
+```sh
+make format
+make lint
 ```
 
 ## Deployment
 
-Deployment [is configured](uwsgi.ini) using the production-grade
-[uwsgi](https://uwsgi-docs.readthedocs.io/en/latest/) server.
+Deployment is configured using [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/)
+and [nginx](https://nginx.org/).
+
+Remember to set the environment variables before starting `uwsgi`. Depending on the deployment
+environment, this could mean directly exporting the variables or just sourcing `.envrc` (with all
+production variables — including `NODEBUG`):
 
 ```sh
-uwsgi --ini=uwsgi.ini -H venv/
+source .envrc
+uwsgi uwsgi.ini
 ```
 
-You also need to populate your shell environment:
+Note that the value of the `NODEBUG` variable is ignored. What matters is merely its existence
+in the environment.
+
+## Backup
+
+To automate backup, there is [a script](backup-database.sh) which dumps the database and uploads
+it into AWS S3. The script also needs the database password as an environment variable. The
+key needs to be `PGPASSWORD`. The backup script assumes the variable lives in `.envrc` like so:
 
 ```sh
-export SECRET_KEY="thisisthesecretkey"
-export DATABASE_URL="postgres://username:password@localhost:5432/db_name"
-export EMAIL_HOST_USER="smtp_user"
-export EMAIL_HOST_PASSWORD="smtp_password"
+export PGPASSWORD=db-password
 ```
 
-## Dokku
+To restore a dump:
 
-This project is also configured to deploy to [dokku](http://dokku.viewdocs.io/dokku/).
-* [Procfile](Procfile): app init command
-* [app.json](app.json): predeploy tasks
-* [DOKKU_SCALE](DOKKU_SCALE): process scaling
+```sh
+pg_restore -v -h localhost -cO --if-exists -d illich -U illich -W illich.dump
+```
+
+To add on cron:
+
+```sh
+0 */6 * * * /opt/apps/illich/backup-database.sh
+```
 
 ## License
 
