@@ -1,4 +1,17 @@
-venv/
-db_data/
+# python
 *.pyc
-.env
+venv/
+
+# environment
+.envrc
+
+# generated static
+/static/
+
+# testing
+.coverage
+htmlcov/
+
+# docker
+db_data/
+docker-compose.override.yml
