@@ -4,12 +4,8 @@
 #
 #    pip-compile
 #
-asgiref==3.2.10           # via django
-dj-database-url==0.5.0    # via -r requirements.in
-django-dotenv==1.4.2      # via -r requirements.in
-django==3.1.1             # via -r requirements.in
+asgiref==3.3.4            # via django
+django==3.2               # via -r requirements.in
 psycopg2-binary==2.8.6    # via -r requirements.in
-pytz==2020.1              # via django
-sqlparse==0.3.1           # via django
-uwsgi==2.0.19.1           # via -r requirements.in
-whitenoise==5.2.0         # via -r requirements.in
+pytz==2021.1              # via django
+sqlparse==0.4.1           # via django
