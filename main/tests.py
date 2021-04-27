@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -11,10 +12,16 @@ class IndexTestCase(TestCase):
 
 
 class BlogCreateTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+
     def test_blog_creation(self):
         data = {
-            "title": "jon's blog",
-            "url": "https://jon.com",
+            "title": "alice's blog",
+            "url": "https://alice.mataroa.blog",
             "description": "opinions",
         }
         response = self.client.post(reverse("blog_create"), data)
@@ -23,16 +30,23 @@ class BlogCreateTestCase(TestCase):
 
 
 class BlogCreateDuplicateTestCase(TestCase):
-    def test_duplicate_blog_creation(self):
+    def setUp(self):
+        self.user = User.objects.create(username="alice")
+        self.user.set_password("abcdef123456")
+        self.user.save()
+        self.client.login(username="alice", password="abcdef123456")
+
         data = {
-            "title": "jon's blog",
-            "url": "https://jon.com",
+            "title": "alice's blog",
+            "url": "https://alice.mataroa.blog",
             "description": "opinions",
         }
         self.client.post(reverse("blog_create"), data)
+
+    def test_duplicate_blog_creation(self):
         data = {
-            "title": "jon's 2nd blog",
-            "url": "https://jon.com",
+            "title": "alice's 2nd blog",
+            "url": "https://alice.mataroa.blog",
             "description": "opinions",
         }
         response = self.client.post(reverse("blog_create"), data)
@@ -43,11 +57,11 @@ class BlogCreateDuplicateTestCase(TestCase):
 class MetadataTestCase(TestCase):
     def test_metadata_title(self):
         data = {
-            "url": "https://sirodoht.com/",
+            "url": "https://mataroa.blog/",
         }
         response = self.client.post(reverse("metadata"), data)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "sirodoht blog")
+        self.assertContains(response, "Mataroa")
 
     def test_metadata_invalid_url(self):
         data = {
@@ -58,7 +72,7 @@ class MetadataTestCase(TestCase):
 
     def test_metadata_not_found_url(self):
         data = {
-            "url": "https://sirodoht.com/404",
+            "url": "https://mataroa.blog/404",
         }
         response = self.client.post(reverse("metadata"), data)
         self.assertEqual(response.status_code, 200)
