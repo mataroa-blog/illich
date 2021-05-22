@@ -119,7 +119,7 @@ make lint
 
 ## Deployment
 
-Deployment is configured using [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/)
+Deployment is configured using [uWSGI](https://uwsgi.readthedocs.io/en/latest/)
 and [nginx](https://nginx.org/).
 
 Remember to set the environment variables before starting `uwsgi`. Depending on the deployment
