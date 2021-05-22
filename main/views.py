@@ -8,6 +8,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.views.decorators.http import require_POST
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
 
@@ -43,10 +44,8 @@ class BlogCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         return super().form_valid(form)
 
 
+@require_POST
 def metadata(request):
-    if request.method != "POST":
-        return HttpResponse()
-
     class MetadataForm(forms.Form):
         url = forms.URLField()
 
@@ -54,14 +53,17 @@ def metadata(request):
     if form.is_valid():
         try:
             webpage = urllib.request.urlopen(form.cleaned_data.get("url")).read()
-            title = (
-                str(webpage).replace("\n", " ").split("<title>")[1].split("</title>")[0]
-            )
+            webpage = str(webpage).replace("\n", " ")
+
+            if "<title>" not in webpage:
+                return HttpResponse("no title")
+
+            title = webpage.split("<title>")[1].split("</title>")[0]
         except (urllib.error.HTTPError, urllib.error.URLError):
             title = ""
         return HttpResponse(title)
     else:
-        return HttpResponse("")
+        return HttpResponse("invalid")
 
 
 def go_random(request):
