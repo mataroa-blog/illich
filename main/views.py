@@ -26,7 +26,7 @@ class BlogList(ListView):
         if form.is_valid():
             return models.Blog.objects.filter(
                 description__icontains=form.cleaned_data["key"]
-            )
+            ).order_by("?")
         else:
             return models.Blog.objects.all().order_by("?")
 
