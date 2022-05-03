@@ -3,20 +3,47 @@
 set -e
 set -x
 
-# pull latest changes
-ssh root@95.217.223.96 'cd /opt/apps/illich && git pull'
+# make sure linting checks pass
+make lint
 
-# sync requirements
-ssh root@95.217.223.96 'cd /opt/apps/illich && source venv/bin/activate && pip install -r requirements.txt'
+# static
+python manage.py collectstatic --noinput
 
-# collect static
-ssh root@95.217.223.96 'cd /opt/apps/illich && source venv/bin/activate && python manage.py collectstatic --noinput'
+# start postgres server
+set +e
+DID_WE_START_PG=0
+PGDATA=postgres-data/ pg_ctl status | grep 'is running'
+# if pg is running, grep will succeed, which means exit code 0
+if [ ${PIPESTATUS[1]} -eq 1 ]; then
+    PGDATA=postgres-data/ pg_ctl start
+    DID_WE_START_PG=1
+fi
+set -e
 
-# migrate database
-ssh root@95.217.223.96 'cd /opt/apps/illich && source venv/bin/activate && source .envrc && python manage.py migrate'
+# make sure latest requirements are installed
+pip install -U pip
+pip install -r requirements.txt
 
-# reload
-ssh root@95.217.223.96 'cp /opt/apps/illich/illich.ini /etc/uwsgi/vassals/ && cd /opt/apps/illich && uwsgi --reload /etc/uwsgi/vassals/illich.ini'
+# make sure tests pass
+python manage.py test
 
-# copy and reload nginx config
-ssh root@95.217.223.96 'cp /opt/apps/illich/collection.mataroa.blog.conf /etc/nginx/sites-available/ && nginx -t && systemctl reload nginx'
+# stop postgres server
+if [ $DID_WE_START_PG -eq 1 ]; then
+    PGDATA=postgres-data/ pg_ctl stop
+fi
+
+# push origin srht
+git push -v origin master
+
+# push on github
+git push -v github master
+
+# pull on server and reload
+ssh root@95.217.223.96 'cd /opt/apps/illich \
+    && git pull \
+    && source venv/bin/activate \
+    && pip install -U pip \
+    && pip install -r requirements.txt \
+    && python manage.py collectstatic --noinput \
+    && source .envrc && python manage.py migrate \
+    && uwsgi --reload /etc/uwsgi/vassals/illich.ini'
