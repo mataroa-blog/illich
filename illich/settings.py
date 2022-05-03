@@ -27,7 +27,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "nonrandom_secret")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if os.environ.get("NODEBUG") is None else False
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "collection.mataroa.blog", "sirolocal.com"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "collection.mataroa.blog"]
 
 ADMINS = [("Theodore Keloglou", "zf@sirodoht.com")]
 
