@@ -16,3 +16,16 @@ lint:
 cov:
 	coverage run --source='.' --omit '.pyenv/*' manage.py test
 	coverage report -m
+
+pginit:
+	PGDATA=postgres-data/ pg_ctl init
+	PGDATA=postgres-data/ pg_ctl start
+	createuser illich
+	psql -U ${USER} -d postgres -c "ALTER USER illich CREATEDB;"
+	psql -U illich -d postgres -c "CREATE DATABASE illich;"
+
+pgstart:
+	PGDATA=postgres-data/ pg_ctl start
+
+pgstop:
+	PGDATA=postgres-data/ pg_ctl stop
