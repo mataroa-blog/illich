@@ -4,6 +4,9 @@ venv/
 
 # environment
 .envrc
+.direnv/
+.pyenv/
+postgres-data/
 
 # generated static
 /static/
@@ -11,7 +14,3 @@ venv/
 # testing
 .coverage
 htmlcov/
-
-# docker
-db_data/
-docker-compose.override.yml
