@@ -81,8 +81,8 @@ SESSION_COOKIE_AGE = 31449600  # 60 * 60 * 24 * 7 * 52 = 1 year in seconds
 
 database_url = os.environ.get("DATABASE_URL", "")
 database_url = parse.urlparse(database_url)
-# e.g. postgres://mataroa:password@127.0.0.1:5432/mataroa
-database_name = database_url.path[1:]  # url.path is '/mataroa'
+# e.g. postgres://illich:password@127.0.0.1:5432/illich
+database_name = database_url.path[1:]  # url.path is '/illich'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
